@@ -24,11 +24,8 @@ let makeInt n =
 
 let getParent i = match store.(i) with
   | Var j when not j = (-1) ->
-      begin
-        p = getParent j;
-        store.(i) <- Var p;
-        p
-      end
+      let p = getParent j in
+      (store.(i) <- Var p; p)
   | _ -> i
 
 let bind ~parent ~child =
@@ -43,26 +40,22 @@ let runOneStep statement env = match statement with
   | Ast.Skip -> ()
   | Ast.Seq (s1, s2) -> stack := (s1, env) :: (s2, env) :: !stack
   | Ast.VarBind (x1, x2) ->
-      begin
-        p1 = getParent (Env.find x1 env);
-        p2 = getParent (Env.find x2 env);
-        match (store.(p1), store.(p2)) with
-          | (Var _, _) -> bind ~child:p1 ~parent:p2
-          | (_, Var _) -> bind ~child:p2 ~parent:p1
-          | _ -> failwith "Attempting to bind two bound variables"
-      end
+      let p1 = getParent (Env.find x1 env) in
+      let p2 = getParent (Env.find x2 env) in
+      (match (store.(p1), store.(p2)) with
+         | (Var _, _) -> bind ~child:p1 ~parent:p2
+         | (_, Var _) -> bind ~child:p2 ~parent:p1
+         | _ -> failwith "Attempting to bind two bound variables")
   | Ast.ValBind (x, v) ->
-      begin
-        p = getParent (Env.find x env);
-        match v with
-          | Int n -> bind ~child:p ~parent:(makeInt n)
-      end
+      let p = getParent (Env.find x env) in
+      let i =
+        (match v with
+           | Int n -> (makeInt n))
+      in
+      bind ~child:p ~parent:i
   | Ast.Declare (x, s) ->
-      begin
-        i = makeVar ();
-        env' = Env.add x i env;
-        stack := (s, env') :: !stack
-      end
+      let env' = Env.add x (makeVar ()) env in
+      stack := (s, env') :: !stack
   | Ast.ProcCall (x, args) -> ()
 
 let run = match !stack with
