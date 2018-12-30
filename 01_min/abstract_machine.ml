@@ -31,6 +31,9 @@ let getParent i = match store.(i) with
       end
   | _ -> i
 
+let bind ~parent ~child =
+  store.(child) := Var !parent
+
 (* string -> int *)
 module Env = Map.Make(string)
 
