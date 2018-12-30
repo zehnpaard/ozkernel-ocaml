@@ -14,13 +14,22 @@ let makeVar () =
     i
   end
 
-let makeInt n
+let makeInt n =
   let i = !f in
   begin
     store.(i) <- Int n;
     f := i + 1;
     i
   end
+
+let getParent i = match store.cells(i) with
+  | Var j when not j = (-1) ->
+      begin
+        p = getParent j;
+        store.cells(i) <- Var p;
+        p
+      end
+  | _ -> i
 
 (* string -> int *)
 module Env = Map.Make(string)
