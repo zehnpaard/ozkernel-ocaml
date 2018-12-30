@@ -51,7 +51,12 @@ let runOneStep statement env = match statement with
           | (_, Var _) -> bind ~child:p2 ~parent:p1
           | _ -> failwith "Attempting to bind two bound variables"
       end
-  | Ast.ValBind (x, v) -> ()
+  | Ast.ValBind (x, v) ->
+      begin
+        p = getParent (Env.find x env);
+        match v with
+          | Int n -> bind ~child:p ~parent:(makeInt n)
+      end
   | Ast.Declare (x, s) ->
       begin
         i = makeVar ();
