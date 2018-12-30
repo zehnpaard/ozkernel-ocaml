@@ -40,9 +40,9 @@ module Env = Map.Make(string)
 let stack : (Ast.t, Env.t) list ref = ref []
 
 let runOneStep statement env = match statement with
-  | Skip -> ()
-  | Seq (s1, s2) -> stack := (s1, env) :: (s2, env) :: !stack
-  | VarBind (x1, x2) ->
+  | Ast.Skip -> ()
+  | Ast.Seq (s1, s2) -> stack := (s1, env) :: (s2, env) :: !stack
+  | Ast.VarBind (x1, x2) ->
       begin
         p1 = getParent x1;
         p2 = getParent x2;
@@ -51,14 +51,14 @@ let runOneStep statement env = match statement with
           | (_, Var _) -> bind ~child:p2 ~parent:p1
           | _ -> failwith "Attempting to bind two bound variables"
       end
-  | ValBind (x, v) -> ()
-  | Declare (x, s) ->
+  | Ast.ValBind (x, v) -> ()
+  | Ast.Declare (x, s) ->
       begin
         i = makeVar ();
         env' = Env.add x i env;
         stack := (s, env') :: !stack
       end
-  | ProcCall (x, args) -> ()
+  | Ast.ProcCall (x, args) -> ()
 
 let run = match !stack with
   | [] -> ()
