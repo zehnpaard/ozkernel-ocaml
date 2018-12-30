@@ -22,11 +22,11 @@ let makeInt n =
     i
   end
 
-let getParent i = match store.cells(i) with
+let getParent i = match store.(i) with
   | Var j when not j = (-1) ->
       begin
         p = getParent j;
-        store.cells(i) <- Var p;
+        store.(i) <- Var p;
         p
       end
   | _ -> i
