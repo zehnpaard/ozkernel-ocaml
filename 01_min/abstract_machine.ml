@@ -24,3 +24,5 @@ let makeInt n
 
 (* string -> int *)
 module Env = Map.Make(string)
+
+let stack : (Ast.t, Env.t) list ref = ref []
