@@ -44,7 +44,9 @@ let getArgs env args =
 
 let intBinOp f i j k =
   match (store.(i), store.(j)) with
-     | (Int n1, Int n2) -> store.(k) := Int (f n1 n2)
+     | (Int n1, Int n2) ->
+         let a = makeInt (f n1 n2) in
+         store.(k) := Var a
      | (Var i, _) | (_, Var i) ->
          failwith ("Unbound variable passed to int binOp: " ^ string_of_int i)
      | _ -> failwith "Non-int value passed to int binOp"
