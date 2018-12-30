@@ -36,6 +36,29 @@ module Env = Map.Make(string)
 
 let stack : (Ast.t, Env.t) list ref = ref []
 
+let getArg env arg =
+  getParent (Env.find arg env)
+
+let getArgs env args =
+  List.map (getArg env) args
+
+let intBinOp f i j k =
+  match (store.(i), store.(j)) with
+     | (Int n1, Int n2) -> store.(k) := Int (f n1 n2)
+     | (Var i, _) | (_, Var i) ->
+         failwith ("Unbound variable passed to int binOp: " ^ string_of_int i)
+     | _ -> failwith "Non-int value passed to int binOp"
+
+let procCall env x args =
+  let args' = getArgs env args in
+  match (x, args) with
+    | ("+", [i, j, k]) -> intBinOp (+) i j k
+    | ("-", [i, j, k]) -> intBinOp (-) i j k
+    | ("*", [i, j, k]) -> intBinOp ( * ) i j k
+    | ("div", [i, j, k]) -> intBinOp (/) i j k
+    | ("mod", [i, j, k]) -> intBinOp mod i j k
+    | _ -> failwith "Unknown procedure"
+
 let runOneStep statement env = match statement with
   | Ast.Skip -> ()
   | Ast.Seq (s1, s2) -> stack := (s1, env) :: (s2, env) :: !stack
@@ -48,15 +71,14 @@ let runOneStep statement env = match statement with
          | _ -> failwith "Attempting to bind two bound variables")
   | Ast.ValBind (x, v) ->
       let p = getParent (Env.find x env) in
-      let i =
-        (match v with
-           | Int n -> (makeInt n))
+      let i = (match v with
+        | Int n -> (makeInt n))
       in
       bind ~child:p ~parent:i
   | Ast.Declare (x, s) ->
       let env' = Env.add x (makeVar ()) env in
       stack := (s, env') :: !stack
-  | Ast.ProcCall (x, args) -> ()
+  | Ast.ProcCall (x, args) -> procCall env x args
 
 let run = match !stack with
   | [] -> ()
