@@ -21,3 +21,6 @@ let makeInt n
     f := i + 1;
     i
   end
+
+(* string -> int *)
+module Env = Map.Make(string)
