@@ -44,8 +44,8 @@ let runOneStep statement env = match statement with
   | Ast.Seq (s1, s2) -> stack := (s1, env) :: (s2, env) :: !stack
   | Ast.VarBind (x1, x2) ->
       begin
-        p1 = getParent x1;
-        p2 = getParent x2;
+        p1 = getParent (Env.find x1 env);
+        p2 = getParent (Env.find x2 env);
         match (store.(p1), store.(p2)) with
           | (Var _, _) -> bind ~child:p1 ~parent:p2
           | (_, Var _) -> bind ~child:p2 ~parent:p1
