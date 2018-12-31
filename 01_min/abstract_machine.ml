@@ -42,13 +42,14 @@ let getArg env arg =
 let getArgs env args =
   List.map (getArg env) args
 
+exception UnboundVariable of int
+
 let intBinOp f i j k =
   match (store.(i), store.(j)) with
      | (Int n1, Int n2) ->
          let a = makeInt (f n1 n2) in
          store.(k) := Var a
-     | (Var i, _) | (_, Var i) ->
-         failwith ("Unbound variable passed to int binOp: " ^ string_of_int i)
+     | (Var i, _) | (_, Var i) -> UnboundVariable i
      | _ -> failwith "Non-int value passed to int binOp"
 
 let procCall env x args =
