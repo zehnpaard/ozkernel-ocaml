@@ -21,6 +21,8 @@ rule read = parse
   | "end" { END }
   | '{' { LBRACE }
   | '}' { RBRACE }
+  | "proc" { PROC }
+  | '$' { DOLLAR }
   | int { INT (int_of_string (Lexing.lexeme lexbuf)) }
   | id { ID (Lexing.lexeme lexbuf) }
   | white { read lexbuf }
