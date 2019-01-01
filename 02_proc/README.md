@@ -2,13 +2,17 @@
 =
 
 * Ints are the only numbers (no floats)
-* Numbers are the only values
+* Numbers and procedures are values
 * No records
-* No procedures
 * Builtins called like procedures but do not have procedure values
 
 ```
-<v> ::= <int>
+<v> ::=
+    <int>
+  | <procedure>
+
+<procedure> ::=
+    proc { $ <x>1 .. <x>n } <s> end
  
 <builtin> ::=
     "+"
