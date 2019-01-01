@@ -55,11 +55,11 @@ let intBinOp f i j k =
 let procCall env x args =
   let args' = getArgs env args in
   match (x, args) with
-    | ("+", [i, j, k]) -> intBinOp (+) i j k
-    | ("-", [i, j, k]) -> intBinOp (-) i j k
-    | ("*", [i, j, k]) -> intBinOp ( * ) i j k
-    | ("div", [i, j, k]) -> intBinOp (/) i j k
-    | ("mod", [i, j, k]) -> intBinOp mod i j k
+    | ("+", [i; j; k]) -> intBinOp (+) i j k
+    | ("-", [i; j; k]) -> intBinOp (-) i j k
+    | ("*", [i; j; k]) -> intBinOp ( * ) i j k
+    | ("div", [i; j; k]) -> intBinOp (/) i j k
+    | ("mod", [i; j; k]) -> intBinOp mod i j k
     | _ -> failwith "Unknown procedure"
 
 let runOneStep statement env = match statement with
