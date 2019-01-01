@@ -32,7 +32,7 @@ let bind ~parent ~child =
   store.(child) := Var !parent
 
 (* string -> int *)
-module Env = Map.Make(string)
+module Env = Map.Make(String)
 
 let stack : (Ast.t, Env.t) list ref = ref []
 
