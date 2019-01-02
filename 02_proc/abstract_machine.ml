@@ -21,7 +21,11 @@ let makeInStore v =
 let makeVar () = makeInStore (Var (-1))
 let makeInt n = makeInStore (Int n)
 let makeProc v e = match v with
-  | Ast.Proc _ -> makeInStore (Proc (v, e)) (* Inefficient closure, must fix *)
+  | Ast.Proc _ ->
+      let fvs = Ast.freeVarsProc v in
+      let f key env = Env.add key (Env.find key e) env in
+      let e' = List.fold_right f fvs Env.empty in
+      makeInStore (Proc (v, e'))
   | _ -> failwith "makeProc called with non-procedure value"
 
 let getParent i = match store.(i) with
