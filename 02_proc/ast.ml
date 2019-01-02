@@ -19,13 +19,14 @@ let rec freeVars' boundVars = function
       List.filter f [x1; x2]
   | ValBind (x, Integer _) ->
       if Bound.mem x boundVars then [] else [x]
-  | ValBind (x, Proc (xs, s)) ->
-      let fvs = freeVars' (List.fold_right Bound.add xs boundVars) s in
+  | ValBind (x, Proc _ as p) ->
+      let fvs = freeVarsProc p  in
       if Bound.mem x boundVars then fvs else x :: fvs
   | Declare (x, s) ->
       freeVars' (Bound.add x boundVars) s
   | ProcCall (x, args) ->
       let f x = not (Bound.mem x boundVars) in
       List.filter f (x :: args)
-
-let freeVars = freeVars' Bound.empty
+and freeVarsProc = function
+  | Proc (xs, s) -> freeVars' (List.fold_right Bound.add xs boundVars) s
+  | _ -> failwith "freeVarsProc called on non-procedure"
