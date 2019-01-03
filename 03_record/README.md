@@ -1,9 +1,8 @@
-02 -Procedures
+03 - Records
 =
 
 * Ints are the only numbers (no floats)
-* Numbers and procedures are values
-* No records
+* Numbers, procedures and are values
 * Builtins called like procedures but do not have procedure values
 
 ```
