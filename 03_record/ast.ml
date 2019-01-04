@@ -1,6 +1,7 @@
 type v =
   | Integer of int
   | Proc of string list * t
+  | Record of string * (v * string) list
 and t =
   | Seq of t * t
   | Skip
