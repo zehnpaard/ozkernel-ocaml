@@ -1,6 +1,10 @@
 %token <int> INT
 %token <string> VAR
+%token <string> LABEL
 %token COMMA
+%token COLON
+%token LPAREN
+%token RPAREN
 %token LBRACE
 %token RBRACE
 %token EQ
@@ -23,6 +27,12 @@ prog:
 value:
   | n = INT { Ast.Integer n }
   | PROC; LBRACE; DOLLAR; args = list(VAR); RBRACE; s = statement; END { Ast.Proc (args, s) }
+  | l = LABEL { Ast.Record (l, []) }
+  | l = LABEL; LPAREN; xs = list(record_pair); RPAREN { Ast.Record (l, xs) }
+  ;
+
+record_pair:
+  | v = value; COLON; s = VAR { (v, s) }
 
 statement:
   | s1 = simple_statement; COMMA; s2 = statement { Ast.Seq (s1, s2) }
