@@ -2,13 +2,26 @@
 =
 
 * Ints are the only numbers (no floats)
-* Numbers, procedures and are values
+* Numbers, procedures and records are values
 * Builtins called like procedures but do not have procedure values
+* Booleans are represented as records
 
 ```
 <v> ::=
     <int>
   | <procedure>
+  | <record>
+
+<record> ::=
+    <literal>
+  | <literal> (<feature>1: <x>1 .. <feature>n: <x>n )
+
+<literal> ::= <atom> | <bool>
+<feature> ::= <atom> | <bool> | <int>
+
+<bool> ::= true | false
+
+(* <x> starts with uppercase, <atom> starts with lowercase *)
 
 <procedure> ::=
     proc { $ <x>1 .. <x>n } <s> end
