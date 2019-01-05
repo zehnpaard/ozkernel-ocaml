@@ -1,15 +1,29 @@
-02 -Procedures
+03 - Records
 =
 
 * Ints are the only numbers (no floats)
-* Numbers and procedures are values
-* No records
+* Numbers, procedures and records are values
 * Builtins called like procedures but do not have procedure values
+* Booleans are represented as records
+* Variables start with uppercase or are enclosed in backquotes `
+* Atoms start with lowercase or are enclosed in singlequotes '
 
 ```
 <v> ::=
     <int>
   | <procedure>
+  | <record>
+
+<record> ::=
+    <literal>
+  | <literal> (<feature>1: <x>1 .. <feature>n: <x>n )
+
+<literal> ::= <atom> | <bool>
+<feature> ::= <atom> | <bool> | <int>
+
+<bool> ::= true | false
+
+(* <x> starts with uppercase, <atom> starts with lowercase *)
 
 <procedure> ::=
     proc { $ <x>1 .. <x>n } <s> end
