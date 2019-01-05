@@ -10,8 +10,13 @@ let int = digit | ['1'-'9'] digit*
 
 let white = [' ''\t']+
 
-let var = ['A'-'Z'] ['a'-'z''A'-'Z''0'-'9']* | ['+' '-' '*']
-let label = ['a'-'z'] ['a'-'z''A'-'Z''0'-'9']*
+let var1 = ['A'-'Z'] ['a'-'z''A'-'Z''0'-'9']* | ['+' '-' '*']
+let var2 = \` ['a'-'z''A'-'Z''0'-'9']* \`
+let var = var1 | var2
+
+let label1 = ['a'-'z'] ['a'-'z''A'-'Z''0'-'9']*
+let label2 = \' ['a'-'z''A'-'Z''0'-'9']* \'
+let label = label1 | label2
 
 rule read = parse
   | ',' { COMMA }
