@@ -5,6 +5,8 @@
 * Numbers, procedures and records are values
 * Builtins called like procedures but do not have procedure values
 * Booleans are represented as records
+* Variables start with uppercase or are enclosed in backquotes `
+* Atoms start with lowercase or are enclosed in singlequotes '
 
 ```
 <v> ::=
